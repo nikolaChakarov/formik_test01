@@ -10,17 +10,23 @@ const useForm = (props) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleBlur = (e) => {
+       
         setTouched(prev => ({
             ...prev,
             [e.target.name]: true
         }));
-        
-        handleValidate();
+
+        const validationErrors = validate(values);
+        setErrors(Object.assign(errors, validationErrors));
+
+        // handleValidate(values);
     };
 
     const handleChange = (e) => {
+
         setErrors((prev) => {
             delete prev[e.target.name];
+            console.log({ prev });
             return prev;
         });
 
@@ -29,38 +35,62 @@ const useForm = (props) => {
             [e.target.name]: e.target.value
         }));
 
-        handleValidate()
+        const validationErrors = validate(values);
+        setErrors(Object.assign(errors, validationErrors));
+
+
+        // handleValidate(values)
 
     };
 
     const handleCheck = (e) => {
+
+        setErrors((prev) => {
+            delete prev[e.target.name];
+            console.log({ prev });
+            return prev;
+        });
+
         setValues(prev => ({
             ...prev,
             [e.target.name]: e.target.checked
-        }))
-    }
- 
-    const handleValidate = () => {
+        }));
 
-        const validationRes = validate(values);
+        const validationErrors = validate(values);
+        setErrors(Object.assign(errors, validationErrors));
+
+    }
+
+    console.log({ errors });
+
+    const handleValidate = (val) => {
+
+        const validationRes = validate(val);
         const isErrors = Boolean(Object.keys(validationRes).length > 0);
  
-        setErrors(Object.assign(errors, validationRes));
-
         setIsValid(!isErrors);
+
+        return {isErrors, validationRes};
 
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        handleValidate(values);
+        const {isErrors, validationRes} = handleValidate(values);
+
+        if (isErrors) {
+        
+            setTouched(validationRes)
+            setErrors(validationRes)
+            return;
+        };
+        
 
         setIsSubmitting(true);
 
         onSubmit(values);
     }
-
 
 
     return { 
@@ -73,7 +103,6 @@ const useForm = (props) => {
         handleBlur,
         handleChange,
         handleCheck,
-        handleValidate,
         handleSubmit
     };
 };

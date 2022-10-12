@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import useForm from './useForm';
 
 const Form = () => {
-    const [initValues, setInitValues] = useState({
+    const initValues = {
         defaultValues: false,
         name: '',
         email: '',
@@ -11,7 +11,7 @@ const Form = () => {
         descr: '',
         country: '',
         agree: false
-    });
+    };
 
     const validate = (values) => {
         const errors = {};
@@ -27,7 +27,7 @@ const Form = () => {
             errors.email = 'Email format is not correct!'
         }
         
-        if (values.defaultValues && !values.agree) {
+        if (!values.agree) {
             errors.agree = 'You have to agree to submit the form'
         }
 
@@ -40,9 +40,7 @@ const Form = () => {
         }, 500);
 
 
-        if (isValid) {
-            console.log({values});
-        }
+        console.log({values});
     }
 
     const {
@@ -55,11 +53,8 @@ const Form = () => {
         handleBlur,
         handleChange,
         handleCheck,
-        handleValidate,
         handleSubmit
     } = useForm({ initValues, validate, onSubmit });
-
-    console.log({isValid});
 
 
 
@@ -78,7 +73,7 @@ const Form = () => {
                 />
             </label>
 
-           {values.defaultValues && <div style={{ display: 'flex', flexDirection: 'column', gap: '15px'}}> 
+           {!values.defaultValues && <div style={{ display: 'flex', flexDirection: 'column', gap: '15px'}}> 
 
             <label htmlFor="name">
                 <span>Name</span>
@@ -91,7 +86,7 @@ const Form = () => {
                     onChange={handleChange}
                 />
             </label>
-            {(touched.name || errors.name) &&  <ErrorMsg message={errors.name}/>}
+            {touched.name && errors.name && <ErrorMsg message={errors.name}/>}
 
             <label htmlFor="email">
                 <span>Email</span>
@@ -104,7 +99,7 @@ const Form = () => {
                     onChange={handleChange}
                 />
             </label>
-            {(touched.email || errors.email) && <ErrorMsg message={errors.email}/>}
+            {touched.email && errors.email && <ErrorMsg message={errors.email}/>}
 
             <label htmlFor="gender">
                 <span>Gender</span>
@@ -131,11 +126,17 @@ const Form = () => {
                 </select>
            </div>
 
-
             <label htmlFor="agree">
                 <span>Agree</span>
-                <input type="checkbox" name='agree'/>
+                <input
+                    type="checkbox"
+                    name='agree'
+                    checked={values.agree}
+                    onBlur={handleBlur}
+                    onChange={handleCheck}
+                    />
             </label>
+            {touched.agree && errors.agree && <ErrorMsg message={errors.agree}/>}
 
             </div>}
             
