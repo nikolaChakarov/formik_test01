@@ -9,7 +9,7 @@ const Form = () => {
         gender: '',
         age: '',
         descr: '',
-        country: '',
+        country: 'def',
         agree: false
     };
 
@@ -104,22 +104,60 @@ const Form = () => {
             <label htmlFor="gender">
                 <span>Gender</span>
                 <p>man</p>
-                <input type="radio" name='gender' value={'man'}/>
+                <input
+                    type="radio"
+                    name='gender'
+                    value={'man'}
+                    onChange={handleChange} 
+                    onBlur={handleBlur}
+                    checked={values.gender === 'man'}            
+                    />
+                    
                 <p>woman</p>
-                <input type="radio" name='gender' value={'woman'}/>
+                <input
+                    type="radio"
+                    name='gender'
+                    value={'woman'}
+                    onChange={handleChange}
+                    checked={values.gender === 'woman'}
+                onBlur={handleBlur}/>
             </label>
 
             <label htmlFor="age">
                 <span>Age</span>
-                <input type="number" name='age' placeholder='age' min={0}/>
+                <input
+                    type="number"
+                    name='age'
+                    placeholder='age'
+                    min={0}
+                    value={values.age}
+                    onChange={handleChange} 
+                    onBlur={handleBlur}
+                />
             </label>
 
             <div>
-            <textarea name="descr" id="" cols="30" rows="10"></textarea>
+            <textarea
+                name="descr"
+                id=""
+                cols="30"
+                rows="10"
+                value={values.descr}
+                onChange={handleChange} 
+                onBlur={handleBlur}
+                ></textarea>
             </div>
 
            <div className="select-wrapper">
-            <select name="countries" id="">
+            <select 
+                name="country"
+                id=""
+                value={values.country}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                defaultChecked={values.country}
+            >
+                    <option value="def" disabled>Select country</option>
                     <option value="fr">France</option>
                     <option value="bg">Bulgaria</option>
                     <option value="au">Australia</option>
