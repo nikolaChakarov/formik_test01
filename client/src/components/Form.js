@@ -1,9 +1,8 @@
-import {useEffect, useState} from 'react';
 import useForm from './useForm';
 
 const Form = () => {
     const initValues = {
-        defaultValues: false,
+        defaultValues: true,
         name: '',
         email: '',
         gender: '',
@@ -16,6 +15,10 @@ const Form = () => {
     const validate = (values) => {
         const errors = {};
         const emailReg = new RegExp(/^[a-zA-Z0-9]+@[a-z]+\.[a-z]{2,4}$/);
+ 
+        if(values.defaultValues) {
+            return {};
+        }
 
         if (values.name === '') {
             errors.name = 'Name is required'
